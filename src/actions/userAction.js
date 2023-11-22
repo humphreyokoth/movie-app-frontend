@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {api} from '../api/api.js';
 import {
     LOGIN_REQUEST,
     LOGIN_SUCCESS,
@@ -12,7 +13,7 @@ import {
     CLEAR_ERRORS
 }from '../constants/userConstants.js';
 
-const api = 'http://localhost:5000';
+
 
 // login
 export const login = (email,password) =>async(dispatch)=>{
