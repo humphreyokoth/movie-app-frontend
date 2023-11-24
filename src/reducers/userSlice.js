@@ -37,15 +37,27 @@ async ({ email, password }) => {
 );
 
 /* Handles the API call for user registration. */
-export const registerUser = async (user) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
+export const registerUser = createAsyncThunk(
+  'user/register',
+
+async ({name,email,password,thunkAPI}) => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
     }
+    const data = await axios.post(`${API_URL}/api/v1/register`,name,email,password, config)
+   if(data) {
+    localStorage.setItem('token',data.token);
+    return data;
+   }
+  } catch (error) {
+    console.log(error.message);
+    thunkAPI.rejectWithValue(error.message);
   }
-  const data = await axios.post(`${API_URL}/register/`, user, config)
-  return data
-}
+  
+})
 
 /* Handles the API call for adding a movie. */
 export const addMovie = async (movie) => {
@@ -81,8 +93,10 @@ export const deleteItem = async (id) => {
 export const userSlice = createSlice({
 name:'user',
 initialState:{
-  username:'',
+  name:'',
   email:'',
+  password:'',
+  status:'idle',
   isFetching:false,
   isSuccess:false,
   isError:false,
@@ -90,34 +104,31 @@ initialState:{
 
 },
 reducers:{
-  clearState:(state)=>{
+  clearState:(state) =>{
     state.isError = false;
     state.isSuccess = false;
     state.isFetching = false;
-    return state;
+    state.errorMessage= null;
   }
 },
-extraReducers:{
-[registerUser.fullfilled]:(state,{payload})=>{
-console.log('payload',payload);
-state.isFetching = false;
-state.isSuccess = true;
-state.email = payload.user.email;
-state.username = payload.user.username;
-
-},
-[registerUser.pending]:(state)=>{
-  state.isFetching = true;
-
-},
-[registerUser.rejected]:(state,{payload})=>{
-  state.isFetching=false;
-  state.isError = false;
-  state.errorMessage = payload.message;
-}
-
-
-
+extraReducers: builder=>{
+  builder
+  .addCase(registerUser.pending,(state)=>{
+    state.isFetching= true;
+  })
+  .addCase(registerUser.fulfilled,(state,action)=>{
+    state.isFetching = false;
+    state.isSuccess = true;
+    state.user.name = action.payload.name;
+    state.user.email = action.payload.email;
+    state.user.password = action.payload.password;
+   
+  })
+  .addCase(registerUser.rejected,(state,action) =>{
+    state.isFetching = false;
+    state.isError = true;
+    state.errorMessage = action.error.message;
+  })
 
 
 }

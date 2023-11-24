@@ -1,39 +1,37 @@
 import React, { Fragment, useEffect } from "react";
-import { Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 // import 'bootstrap/dist/css/bootstrap.min.css';
-import {registerUser,clearState,userSelector}from '../../reducers/userSlice'
-
+import {
+  registerUser,
+  clearState,
+  userSelector,
+} from "../../reducers/userSlice";
 
 const Register = () => {
   const dispatch = useDispatch();
   const { register, errors, handleSubmit } = useForm();
   const navigate = useNavigate();
-  const { isFetching, isSuccess, isError, errorMessage } = useSelector(userSelector);
+  const { isFetching, isSuccess, isError, errorMessage } =
+    useSelector(userSelector);
 
   const onSubmit = (data) => {
     dispatch(registerUser(data));
   };
 
   useEffect(() => {
-    return () => {
-      dispatch(clearState());
-    };
-  }, []);
-
-  useEffect(() => {
     if (isSuccess) {
       dispatch(clearState());
-     
+
       navigate("/");
     }
     if (isError) {
       toast.error(errorMessage);
       dispatch(clearState());
     }
-  }, [isSuccess, isError,navigate]);
+  }, [isSuccess, isError, navigate, dispatch]);
 
   return (
     <Fragment>
@@ -50,7 +48,6 @@ const Register = () => {
                   id="name"
                   name="name"
                   type="text"
-                  ref={register({ required: true })}
                   autoComplete="name"
                   required
                   className="form-control"
@@ -65,7 +62,6 @@ const Register = () => {
                   id="email"
                   name="email"
                   type="email"
-                  ref={register({ pattern: /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/i })}
                   autoComplete="email"
                   required
                   className="form-control"
@@ -80,7 +76,6 @@ const Register = () => {
                   id="password"
                   name="password"
                   type="password"
-                  ref={register({ required: true })}
                   autoComplete="current-password"
                   required
                   className="form-control"
@@ -95,7 +90,11 @@ const Register = () => {
                 >
                   {isFetching ? (
                     <>
-                      <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                      <span
+                        className="spinner-border spinner-border-sm me-2"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
                       Registering
                     </>
                   ) : (
@@ -106,7 +105,7 @@ const Register = () => {
             </form>
             <div className="text-center">
               <span className="px-2 bg-white text-gray-500">
-                Or <Link to="login">Login</Link>
+                Have an account <Link to="login">Login</Link>
               </span>
             </div>
           </div>
