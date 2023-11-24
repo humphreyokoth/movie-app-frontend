@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
-// import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import {
   registerUser,
   clearState,
@@ -105,7 +105,7 @@ const Register = () => {
             </form>
             <div className="text-center">
               <span className="px-2 bg-white text-gray-500">
-                Have an account <Link to="login">Login</Link>
+                Have an account <Link to="/login">Login</Link>
               </span>
             </div>
           </div>
