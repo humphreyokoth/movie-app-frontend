@@ -59,34 +59,6 @@ async ({name,email,password,thunkAPI}) => {
   
 })
 
-/* Handles the API call for adding a movie. */
-export const addMovie = async (movie) => {
-  const config = getHeaders()
-  const { data } = await axios.post(`${API_URL}/movielist/`, movie, config)
-  return data
-}
-
-/* Handles Api call for getting all movies */
-export const getAllItems = async () => {
-  const config = getHeaders()
-  const data = await axios.get(`${API_URL}/movies`, config)
-  return data
-}
-
-/* Handles Api call for editing an item */
-export const editItem = async (movie) => {
-  const config = getHeaders()
-  const { data } = await axios.put(`${API_URL}/movie/${movie.id}`, movie, config)
-  return data
-}
-
-/* Handles Api call for deleting an item */
-export const deleteItem = async (id) => {
-  const config = getHeaders()
-  const { data } = await axios.delete(
-    `${API_URL}/movie/${id}`, config)
-  return data
-}
 
 
 
@@ -128,6 +100,38 @@ extraReducers: builder=>{
     state.isFetching = false;
     state.isError = true;
     state.errorMessage = action.error.message;
+  })
+
+  .addCase(login.fulfilled,(state,action)=>{
+    state.isFetching = false;
+    state.isSuccess = true;
+    state.email = action.payload.email;
+    state.password = action.payload.password;
+  })
+  .addCase(login.rejected,(state,action)=>{
+    state.isFetching = false;
+    state.isError = true;
+    state.errorMessage = action.payload.message;
+  })
+  .addCase(login.pending,(state)=>{
+    state.isFetching = true;
+  })
+
+  .addCase(fetchUserByToken.pending,(state)=>{
+    state.isFetching = true;
+
+  })
+  addCase(fetchUserByToken.fulfilled,(state,action)=>{
+    state.isFetching = false;
+    state.isSuccess = true;
+    state.email = action.payload.email;
+    state.name = action.payload.name;
+
+
+  })
+  addCase(fetchUserByToken.rejected,(state)=>{
+    state.isFetching = false;
+    state.isError = true;
   })
 
 

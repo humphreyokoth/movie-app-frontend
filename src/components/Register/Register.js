@@ -8,7 +8,7 @@ import {
   registerUser,
   clearState,
   userSelector,
-} from "../../reducers/userSlice";
+} from "../../reducers/authSlice";
 
 const Register = () => {
   const dispatch = useDispatch();

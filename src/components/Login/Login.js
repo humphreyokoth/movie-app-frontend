@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { login, clearState, userSelector } from "../../reducers/userSlice";
+import { login, clearState, userSelector } from "../../reducers/authSlice";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import "bootstrap/dist/css/bootstrap.min.css";
