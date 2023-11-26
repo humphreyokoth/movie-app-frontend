@@ -59,7 +59,25 @@ async ({name,email,password,thunkAPI}) => {
   
 })
 
+export const fetchUserByToken = createAsyncThunk(
+  'user/token',
+  async({token},thunkAPI)=>{
+try {
+  const config ={
+    headers:{
+      'Content-Type':'application/json'
+    }
+  }
+  const response = await axios(`${API_URL}/api/v1/token`,token,config)
+  if (response=== 200) {
+    return {...response}
 
+  }
+} catch (error) {
+  return  thunkAPI.rejectWithValue(error.respons.data)
+}
+  }
+)
 
 
 export const userSlice = createSlice({
@@ -121,7 +139,7 @@ extraReducers: builder=>{
     state.isFetching = true;
 
   })
-  addCase(fetchUserByToken.fulfilled,(state,action)=>{
+  .addCase(fetchUserByToken.fulfilled,(state,action)=>{
     state.isFetching = false;
     state.isSuccess = true;
     state.email = action.payload.email;
@@ -129,7 +147,7 @@ extraReducers: builder=>{
 
 
   })
-  addCase(fetchUserByToken.rejected,(state)=>{
+  .addCase(fetchUserByToken.rejected,(state)=>{
     state.isFetching = false;
     state.isError = true;
   })

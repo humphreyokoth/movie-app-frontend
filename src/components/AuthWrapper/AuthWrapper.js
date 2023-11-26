@@ -1,12 +1,14 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux'
+import Login from '../Login/Login';
 import Register from '../Register/Register';
+
 import './AuthWrapper.scss';
 
 const AuthWrapper = () => {
     const dispatch = useDispatch();
-    const loginVisible = useSelector(selectLoginVisible);
+    const login = useSelector(selectLoginVisible);
     const onSubmitLogin = (data)=>dispatch(loginUser(data));
     const clearErrorStateLogin = dispatch(clearState());
 
@@ -14,7 +16,7 @@ const AuthWrapper = () => {
     const clearErrorStateRegister =() =>dispatch(clearState());   
   return (
     <div className='auth-wrapper'>
-        {loginVisible ? (
+        {Login ? (
             <login onSubmit={onSubmitLogin} isFetching={isFetching} clearState(clearErrorStateLogin)/>
         ):(
         <Register onSubmit={onSubmitRegister} isFetching={isFetching} clearState(clearErrorStateRegister)/>
